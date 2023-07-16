@@ -45,8 +45,8 @@ public:
     /// Copies data with every draw call to the gpu (terrible for performance, 
     /// but I don't really care for the purposes of what I'm creating here).
     void draw(
-        const std::vector<glm::vec2>& V, 
-        const std::vector<GLuint>& VI, 
+        const std::vector<glm::vec3>& V, 
+        const std::vector<glm::u32vec2>& VI, 
         const std::vector<glm::vec3>& C,
         const GLfloat aspect_ratio
     );

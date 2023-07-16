@@ -9,6 +9,7 @@
 
 #include "GL/glcorearb.h"
 #include "renderer.h"
+#include "mesh.h"
 
 const GLuint ignored_ids[] = {
     0x00020071u
@@ -73,6 +74,36 @@ int main(int argc, char* argv[]) {
     );
 
     {
+        // test loading of meshes
+        std::vector<glm::vec3> verts, norms;
+        std::vector<glm::u32vec3> tris;
+        load_mesh_from_obj("res/cube.obj", verts, norms, tris);
+        // std::cout << "Vertices:\n";
+        // for (auto& v : verts) {
+        //     std::cout << "  " << v.x << ", " << v.y << ", " << v.z << "\n";
+        // }
+        // std::cout << "Normals:\n";
+        // for (auto& n : norms) {
+        //     std::cout << "  " << n.x << ", " << n.y << ", " << n.z << "\n";
+        // }
+        // std::cout << "Triangles:\n";
+        // for (auto& t : tris) {
+        //     std::cout << "  " << t.x << ", " << t.y << ", " << t.z << "\n";
+        // }
+        
+        std::vector<glm::u32vec2> edges, adj;
+        get_edges_from_mesh(tris, edges, adj);
+        // std::cout << "Edges:\n";
+        // for (auto& e : edges) {
+        //     std::cout << "  " << e.x << ", " << e.y << "\n";
+        // }
+        // std::cout << "Adj:\n";
+        // for (auto& f : adj) {
+        //     std::cout << "  " << f.x << ", " << f.y << "\n";
+        // }
+
+        std::vector<glm::vec3> colour(edges.size(), glm::vec3(0.8f, 0.7f, 0.5f));
+        
         renderer ren;
         if (ren.init() != 0) {
             glfwDestroyWindow(w);
@@ -80,34 +111,13 @@ int main(int argc, char* argv[]) {
             return -1;
         }
 
-        const std::vector<glm::vec2> V {
-            {-0.5f, -0.5f}, // (X, Y)
-            {-0.5f,  0.5f},
-            { 0.5f, -0.5f},
-            { 0.5f,  0.5f}
-        };
-
-        const std::vector<GLuint> VI {
-            0, 1, // (P1, P2)
-            1, 3,
-            3, 2,
-            2, 0
-        };
-
-        const std::vector<glm::vec3> C {
-            {0.8f, 0.7f, 0.5f},
-            {0.5f, 0.8f, 0.7f},
-            {0.7f, 0.5f, 0.8f},
-            {0.8f, 0.5f, 0.7f}
-        };
-
         while(!glfwWindowShouldClose(w)) {
             int width, height;
             glfwGetWindowSize(w, &width, &height);
 
             glClear(GL_COLOR_BUFFER_BIT);
 
-            ren.draw(V, VI, C, width / (float) height);
+            ren.draw(verts, edges, colour, width / (float) height);
 
             glfwSwapBuffers(w);
             glfwPollEvents();

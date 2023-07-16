@@ -17,7 +17,7 @@ find_package(glfw3 CONFIG REQUIRED)
 find_package(gl3w CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 
-add_executable(linerenderer src/main.cpp src/renderer.cpp)
+add_executable(linerenderer src/main.cpp src/renderer.cpp src/mesh.cpp)
 target_link_libraries(linerenderer PRIVATE glfw)
 target_link_libraries(linerenderer PRIVATE unofficial::gl3w::gl3w)
 target_link_libraries(linerenderer PRIVATE glm::glm)

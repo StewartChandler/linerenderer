@@ -6,10 +6,10 @@ const GLchar* vert_src = R"glsl(
     #version 150
 
     uniform float aRatio;
-    in vec2 pos;
+    in vec3 pos;
 
     void main() {
-        gl_Position = vec4(pos.x / aRatio, pos.y, 0.0, 1.0);
+        gl_Position = vec4(pos.x / aRatio, pos.y, pos.z, 1.0);
     }
 )glsl"; 
 
@@ -176,7 +176,7 @@ int renderer::init() {
 
     GLint pos_attrib = glGetAttribLocation(shader_prog, "pos");
     glEnableVertexAttribArray(pos_attrib);
-    glVertexAttribPointer(pos_attrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(pos_attrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
     tex_loc = glGetUniformLocation(shader_prog, "colMap");
     csize_loc = glGetUniformLocation(shader_prog, "csize");
@@ -192,8 +192,8 @@ int renderer::init() {
 };
 
 void renderer::draw(
-    const std::vector<glm::vec2>& V, 
-    const std::vector<GLuint>& VI, 
+    const std::vector<glm::vec3>& V, 
+    const std::vector<glm::u32vec2>& VI, 
     const std::vector<glm::vec3>& C,
     const GLfloat aspect_ratio
 ) {
@@ -207,11 +207,12 @@ void renderer::draw(
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_1D, col_map);
 
-    static_assert(sizeof(glm::vec2) == sizeof(GLfloat[2]), "glm::vec2 must be tightly packed GLfloat array");
-    GLsizeiptr vert_arr_size = V.size() * sizeof(glm::vec2);
+    static_assert(sizeof(glm::vec3) == sizeof(GLfloat[3]), "glm::vec3 must be tightly packed GLfloat array");
+    GLsizeiptr vert_arr_size = V.size() * sizeof(glm::vec3);
     glBufferData(GL_ARRAY_BUFFER, vert_arr_size, (const GLfloat*) V.data(), GL_STREAM_DRAW);
 
-    GLsizeiptr elem_arr_size = VI.size() * sizeof(GLuint);
+    static_assert(sizeof(glm::u32vec2) == sizeof(GLuint[2]), "glm::u32vec2 must be tightly packed GLuint array");
+    GLsizeiptr elem_arr_size = VI.size() * sizeof(glm::u32vec2);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, elem_arr_size, (const GLuint*) VI.data(), GL_STREAM_DRAW);
 
     static_assert(sizeof(glm::vec3) == sizeof(GLfloat[3]), "glm::vec3 must be tightly packed GLfloat array");

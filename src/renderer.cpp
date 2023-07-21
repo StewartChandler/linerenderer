@@ -223,5 +223,5 @@ void renderer::draw(
     glUniform1f(csize_loc, (GLfloat) C.size());
     glUniform1f(aratio_loc, (GLfloat) aspect_ratio);
 
-    glDrawElements(GL_LINES, (GLsizei) VI.size(), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_LINES, (GLsizei) (VI.size() * 2), GL_UNSIGNED_INT, 0);
 }

@@ -47,8 +47,7 @@ public:
     void draw(
         const std::vector<glm::vec3>& V, 
         const std::vector<glm::u32vec2>& VI, 
-        const std::vector<glm::vec3>& C,
-        const GLfloat aspect_ratio
+        const std::vector<glm::vec3>& C
     );
 };
 

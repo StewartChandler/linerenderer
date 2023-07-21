@@ -2,12 +2,16 @@
 #include <GLFW/glfw3.h>
 #include <glm/fwd.hpp>
 #include <glm/glm.hpp>
+#include <glm/ext/matrix_clip_space.hpp>
+#include <glm/ext/matrix_transform.hpp>
 
 #include <iostream>
 #include <iomanip>
+#include <memory>
 #include <vector>
 
 #include "GL/glcorearb.h"
+#include "camera.h"
 #include "renderer.h"
 #include "mesh.h"
 
@@ -77,7 +81,7 @@ int main(int argc, char* argv[]) {
         // test loading of meshes
         std::vector<glm::vec3> verts, norms;
         std::vector<glm::u32vec3> tris;
-        load_mesh_from_obj("res/cube.obj", verts, norms, tris);
+        load_mesh_from_obj("res/monkey.obj", verts, norms, tris);
         // std::cout << "Vertices:\n";
         // for (auto& v : verts) {
         //     std::cout << "  " << v.x << ", " << v.y << ", " << v.z << "\n";
@@ -104,6 +108,36 @@ int main(int argc, char* argv[]) {
 
         std::vector<glm::vec3> colour(edges.size(), glm::vec3(0.8f, 0.7f, 0.5f));
         
+        int width, height;
+        glfwGetWindowSize(w, &width, &height);
+
+        std::unique_ptr<camera> cam = std::make_unique<camera>(
+            glm::infinitePerspective(1.5f, width / (float) height, 1.0f),
+            glm::lookAt(
+                glm::vec3(0.0f, 0.5f, -4.0f),
+                glm::vec3(0.0f, 0.0f, 0.0f),
+                glm::vec3(0.0f, 1.0f, 0.0f)
+            )
+        );
+
+        std::vector<glm::vec3> t_verts, t_norms;
+        cam->transform(
+            glm::identity<glm::mat4>(),
+            verts,
+            norms,
+            t_verts,
+            t_norms
+        );
+        
+        // std::cout << "Transformed Vertices:\n";
+        // for (auto& v : t_verts) {
+        //     std::cout << "  " << v.x << ", " << v.y << ", " << v.z << "\n";
+        // }
+        // std::cout << "Transformed Normals:\n";
+        // for (auto& n : t_norms) {
+        //     std::cout << "  " << n.x << ", " << n.y << ", " << n.z << "\n";
+        // }
+        
         renderer ren;
         if (ren.init() != 0) {
             glfwDestroyWindow(w);
@@ -112,12 +146,9 @@ int main(int argc, char* argv[]) {
         }
 
         while(!glfwWindowShouldClose(w)) {
-            int width, height;
-            glfwGetWindowSize(w, &width, &height);
-
             glClear(GL_COLOR_BUFFER_BIT);
 
-            ren.draw(verts, edges, colour, width / (float) height);
+            ren.draw(t_verts, edges, colour);
 
             glfwSwapBuffers(w);
             glfwPollEvents();

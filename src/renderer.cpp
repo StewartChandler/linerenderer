@@ -5,11 +5,11 @@
 const GLchar* vert_src = R"glsl(
     #version 150
 
-    uniform float aRatio;
+    // uniform float aRatio;
     in vec3 pos;
 
     void main() {
-        gl_Position = vec4(pos.x / aRatio, pos.y, pos.z, 1.0);
+        gl_Position = vec4(pos.xyz, 1.0);
     }
 )glsl"; 
 
@@ -194,8 +194,7 @@ int renderer::init() {
 void renderer::draw(
     const std::vector<glm::vec3>& V, 
     const std::vector<glm::u32vec2>& VI, 
-    const std::vector<glm::vec3>& C,
-    const GLfloat aspect_ratio
+    const std::vector<glm::vec3>& C
 ) {
     const GLuint &vbo = bufs[0], &ebo = bufs[1];
 
@@ -221,7 +220,7 @@ void renderer::draw(
     glUseProgram(shader_prog);
     glUniform1i(tex_loc, 0);
     glUniform1f(csize_loc, (GLfloat) C.size());
-    glUniform1f(aratio_loc, (GLfloat) aspect_ratio);
+    // glUniform1f(aratio_loc, (GLfloat) aspect_ratio);
 
     glDrawElements(GL_LINES, (GLsizei) (VI.size() * 2), GL_UNSIGNED_INT, 0);
 }

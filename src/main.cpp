@@ -81,7 +81,7 @@ int main(int argc, char* argv[]) {
         // test loading of meshes
         std::vector<glm::vec3> verts, norms;
         std::vector<glm::u32vec3> tris;
-        load_mesh_from_obj("res/monkey.obj", verts, norms, tris);
+        load_mesh_from_obj("res/monkey2.obj", verts, norms, tris);
         // std::cout << "Vertices:\n";
         // for (auto& v : verts) {
         //     std::cout << "  " << v.x << ", " << v.y << ", " << v.z << "\n";
@@ -114,7 +114,7 @@ int main(int argc, char* argv[]) {
         std::unique_ptr<camera> cam = std::make_unique<camera>(
             glm::infinitePerspective(1.5f, width / (float) height, 1.0f),
             glm::lookAt(
-                glm::vec3(0.0f, 0.5f, -4.0f),
+                glm::vec3(0.0f, 2.5f, -4.0f),
                 glm::vec3(0.0f, 0.0f, 0.0f),
                 glm::vec3(0.0f, 1.0f, 0.0f)
             )

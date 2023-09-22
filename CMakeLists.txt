@@ -25,6 +25,7 @@ add_executable(
     src/renderer.cpp
     src/mesh.cpp
     src/camera.cpp
+    src/material.cpp
 )
 target_link_libraries(linerenderer PRIVATE glfw)
 target_link_libraries(linerenderer PRIVATE unofficial::gl3w::gl3w)

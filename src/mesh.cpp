@@ -51,7 +51,10 @@ void load_mesh_from_obj(
                 n += vn[ni];
             }
             
-            normals.push_back(glm::normalize(n));
+            glm::vec3 face_norm = glm::normalize(glm::cross(verts[t[1]] - verts[t[0]], verts[t[2]] - verts[t[1]]));
+
+            // set the normal of a face to be the normal gathered by a x b, then in the same dir as n
+            normals.push_back(glm::dot(face_norm, n) > 0 ? face_norm : -face_norm);
             tris.push_back(t);
         }
     }

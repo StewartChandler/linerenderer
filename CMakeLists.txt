@@ -4,6 +4,8 @@ if(DEFINED ENV{VCPKG_ROOT})
     string(REPLACE "\\" "/" vcpkgRoot "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
     # message(${vcpkgRoot})
     set(CMAKE_TOOLCHAIN_FILE ${vcpkgRoot})
+else()
+    message("No `VCPKG_ROOT` defined")
 endif()
 
 project(linerederer)

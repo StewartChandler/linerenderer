@@ -128,6 +128,9 @@ int main(int argc, char* argv[]) {
             t_verts,
             t_norms
         );
+
+        std::vector<glm::u32vec2> hi_edges, lo_edges;
+        cam->cull_edges(edges, adj, t_verts, t_norms, hi_edges, lo_edges);
         
         // std::cout << "Transformed Vertices:\n";
         // for (auto& v : t_verts) {

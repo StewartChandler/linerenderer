@@ -19,6 +19,15 @@ public:
         std::vector<glm::vec3>& t_verts,
         std::vector<glm::vec3>& t_norms
     );
+
+    void cull_edges (
+        const std::vector<glm::u32vec2>& edges,
+        const std::vector<glm::u32vec2>& adj,
+        const std::vector<glm::vec3>& verts,
+        const std::vector<glm::vec3>& norms,
+        std::vector<glm::u32vec2>& hi,
+        std::vector<glm::u32vec2>& lo
+    );
 };
 
 #endif
